@@ -9,11 +9,9 @@
         <div class="card-header d-flex align-items-center">
             <h1>Email Verification</h1>
             {% if current_user.isEmailVerified %}
-            <a href="{{ url_for('auth.email_verification_view')}}" >
                 <button type="button" class="btn btn-success">
                     Completed
                 </button>
-            </a>
             {% else %}
             <a href="{{ url_for('auth.email_verification_view')}}" >
                 <button type="button" class="btn btn-danger">
@@ -25,11 +23,9 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <h1>Phone Number Verification</h1>
             {% if current_user.isPhoneVerified %}
-            <a href="{{ url_for('auth.phone_verification_view')}}">
                 <button type="button" class="btn btn-success">
                     Authenticate
                 </button>
-            </a>
             {% else %}
             <a href="{{ url_for('auth.phone_verification_view')}}">
                 <button type="button" class="btn btn-danger">

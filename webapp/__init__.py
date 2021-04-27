@@ -17,7 +17,6 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     db.init_app(app)
 
-
     app.config['MAIL_SERVER']='smtp.gmail.com'
     app.config['MAIL_PORT'] = 465
     app.config['MAIL_USERNAME'] = MAIL_USERNAME
@@ -29,9 +28,13 @@ def create_app():
 
     from .views import views
     from .auth import auth
+    from ._security_test import security_test
+    from .simple_res import simple_res
 
     app.register_blueprint(views,url_prefix='/')
     app.register_blueprint(auth,url_prefix='/')
+    app.register_blueprint(security_test,url_prefix='/unit')
+    app.register_blueprint(simple_res,url_prefix='/response')
 
     from .models import User
 

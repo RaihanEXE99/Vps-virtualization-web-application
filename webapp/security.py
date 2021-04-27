@@ -3,6 +3,8 @@ from .models import User,Two_factor_code,EmailConfirmCode,PhoneConfirmCode
 import re,random,datetime
 from . import db
 
+from .private.twilio_otp import getOTPApi
+
 def __sign_up_validation(name,email,password1,password2,phone):
     if name == "" or len(name.replace(" ","")) == 0:
         return 'Full name is empty'
@@ -61,7 +63,6 @@ def __phoneConfirmCode(user):
 
 
 def __generate_otp(user):
-    # exist = Two_factor_code.query.get(user.id)
     exist = Two_factor_code.query.filter_by(user_id=user.id)
     if exist:
         [db.session.delete(x) for x in exist]
@@ -69,8 +70,10 @@ def __generate_otp(user):
         otp = str(random.randint(100000,999999))
         exp = str(datetime.datetime.now() + datetime.timedelta(minutes= 10))
         user_id = user.id
+        getOTPApi(user.phone,otp)
     else:
         otp = str(random.randint(100000,999999))
         exp = str(datetime.datetime.now() + datetime.timedelta(minutes= 10))
         user_id = user.id
+        getOTPApi(user.phone,otp)
     return True,user_id,otp,exp

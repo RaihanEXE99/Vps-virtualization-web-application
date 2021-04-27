@@ -15,6 +15,8 @@ auth = Blueprint('auth',__name__)
 
 @auth.route('/login')
 def login():
+   if current_user.is_authenticated:
+      return redirect(url_for('views.home'))
    return render_template("auth/login.html",user=current_user)
 
 @auth.route('/login',methods=['POST'])
@@ -33,7 +35,7 @@ def login_post():
                p1,p2 = base64.b64encode(email.encode('ascii')).decode("ascii"),base64.b64encode(password.encode('ascii')).decode("ascii")
                return render_template('auth/otp.html',p1=p1,p2=p2)
             else:
-               return redirect(url_for('views.response_basic_view',err_body="Something wrong happend"))
+               return redirect(url_for('simple_res.response_basic_view',err_body="Something wrong happend"))
          else:
             login_user(user,remember=True)
             return redirect(url_for('views.home'))
@@ -60,11 +62,11 @@ def otp_post():
             login_user(user,remember=True)
             return redirect(url_for('views.home'))
          else:
-            return redirect(url_for('views.response_basic_view',err_body="Expired or Invalid Token , Go to Login and try again"))
+            return redirect(url_for('simple_res.response_basic_view',err_body="Expired or Invalid Token , Go to Login and try again"))
       else:
-         return redirect(url_for('views.response_basic_view',err_body="Wrong credentials"))
+         return redirect(url_for('simple_res.response_basic_view',err_body="Wrong credentials"))
    else:
-      return redirect(url_for('views.response_basic_view',err_body="Email does not exist"))
+      return redirect(url_for('simple_res.response_basic_view',err_body="Email does not exist"))
 
 @auth.route('/sign-up',methods=['GET','POST'])
 def sign_up():
@@ -113,13 +115,6 @@ def logout():
    logout_user()
    return redirect(url_for('auth.login'))
 
-
-@auth.route('/email-confirm',methods=['GET'])
-@login_required
-@EmailAuthRequired()
-def emailConfirmCode_view():
-   return "WORKINGGGGGGGGGGGGGGGGGG"
-
 @auth.route('/verification_center')
 @login_required
 def verification_center_view():
@@ -128,12 +123,16 @@ def verification_center_view():
 @auth.route('/phone_verification')
 @login_required
 def phone_verification_view():
+   if current_user.isPhoneVerified:
+      return redirect(url_for('simple_res.response_succ_view'),succ_body="Already Verified")
    return render_template('auth/phone_verification.html')
 
 @auth.route('/email_verification',methods=['POST','GET'])
 @login_required
 def email_verification_view():
-   if request.method == "POST":
+   if current_user.isEmailVerified:
+      return redirect(url_for('simple_res.response_succ_view',succ_body="Already Verified"))
+   elif request.method == "POST":
       otp = request.form.get('otp')
       otp_code = EmailConfirmCode.query.filter_by(user_id=current_user.id).first()
       if (otp_code.otp == otp) and (str(datetime.datetime.now()) < otp_code.exp):
@@ -141,7 +140,7 @@ def email_verification_view():
          db.session.commit()
          return redirect(url_for("auth.verification_center_view"))
       else:
-         return redirect(url_for('views.response_basic_view',err_body="Invalid Code"))
+         return redirect(url_for('simple_res.response_basic_view',err_body="Invalid Code"))
    return render_template('auth/email_verification.html')
 
 @auth.route('/generate-otp-email',methods=['POST'])

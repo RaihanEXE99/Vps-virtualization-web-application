@@ -37,12 +37,6 @@ def two_factor_toggle():
    else:
       return render_template('auth/two_factor_toggle.html',val=val)
 
-
-@views.route('/response/<err_body>/')
-def response_basic_view(err_body):
-   return render_template('response/response_basic.html',err_body=err_body)
-
-
 @views.route('/mail-me')
 def sendmail():
    msg = Message('Yo Bro', sender = MAIL_USERNAME, recipients = ['zushitt@gmail.com'])
