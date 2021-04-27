@@ -48,17 +48,19 @@ def __emailConfirmCode(user):
     return True,otp,exp,user_id
 
 def __phoneConfirmCode(user):
-    exist = EmailAuthCode.query.get(user.id)
+    exist = PhoneConfirmCode.query.filter_by(user_id=user.id)
     if exist:
-        db.session.delete(exist)
+        [db.session.delete(x) for x in exist]
         db.session.commit()
         otp = str(random.randint(100000,999999))
         exp = str(datetime.datetime.now() + datetime.timedelta(minutes= 10))
         user_id = user.id
+        getOTPApi(user.phone,otp)
     else:
         otp = str(random.randint(100000,999999))
         exp = str(datetime.datetime.now() + datetime.timedelta(minutes= 10))
         user_id = user.id
+        getOTPApi(user.phone,otp)
     return True,otp,exp,user_id
 
 

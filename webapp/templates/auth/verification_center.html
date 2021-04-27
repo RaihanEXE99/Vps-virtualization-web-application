@@ -24,7 +24,7 @@
             <h1>Phone Number Verification</h1>
             {% if current_user.isPhoneVerified %}
                 <button type="button" class="btn btn-success">
-                    Authenticate
+                    Completed
                 </button>
             {% else %}
             <a href="{{ url_for('auth.phone_verification_view')}}">

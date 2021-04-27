@@ -4,7 +4,7 @@ from werkzeug.security import  generate_password_hash,check_password_hash
 from .import db
 from flask_login import login_user,login_required,logout_user,current_user
 
-from .security import __sign_up_validation,__generate_otp,__emailConfirmCode
+from .security import __sign_up_validation,__generate_otp,__emailConfirmCode,__phoneConfirmCode
 from .utility.custom_decorators import EmailAuthRequired
 import base64,datetime
 
@@ -35,7 +35,7 @@ def login_post():
                p1,p2 = base64.b64encode(email.encode('ascii')).decode("ascii"),base64.b64encode(password.encode('ascii')).decode("ascii")
                return render_template('auth/otp.html',p1=p1,p2=p2)
             else:
-               return redirect(url_for('simple_res.response_basic_view',err_body="Something wrong happend"))
+               return redirect(url_for('sample.response_basic_view',err_body="Something wrong happend"))
          else:
             login_user(user,remember=True)
             return redirect(url_for('views.home'))
@@ -62,11 +62,11 @@ def otp_post():
             login_user(user,remember=True)
             return redirect(url_for('views.home'))
          else:
-            return redirect(url_for('simple_res.response_basic_view',err_body="Expired or Invalid Token , Go to Login and try again"))
+            return redirect(url_for('sample.response_basic_view',err_body="Expired or Invalid Token , Go to Login and try again"))
       else:
-         return redirect(url_for('simple_res.response_basic_view',err_body="Wrong credentials"))
+         return redirect(url_for('sample.response_basic_view',err_body="Wrong credentials"))
    else:
-      return redirect(url_for('simple_res.response_basic_view',err_body="Email does not exist"))
+      return redirect(url_for('sample.response_basic_view',err_body="Email does not exist"))
 
 @auth.route('/sign-up',methods=['GET','POST'])
 def sign_up():
@@ -120,18 +120,43 @@ def logout():
 def verification_center_view():
    return render_template('auth/verification_center.html')
 
-@auth.route('/phone_verification')
+@auth.route('/phone_verification',methods=['POST','GET'])
 @login_required
 def phone_verification_view():
+   print("BAL\n"*200)
    if current_user.isPhoneVerified:
-      return redirect(url_for('simple_res.response_succ_view'),succ_body="Already Verified")
+      return redirect(url_for('sample.response_succ_view',succ_body="Already Verified"))
+   elif request.method == "POST":
+      otp = request.form.get('otp')
+      otp_code = PhoneConfirmCode.query.filter_by(user_id=current_user.id).first()
+      if (otp_code.otp == otp) and (str(datetime.datetime.now()) < otp_code.exp):
+         current_user.isPhoneVerified = True
+         db.session.commit()
+         return redirect(url_for("auth.verification_center_view"))
+      else:
+         return redirect(url_for('sample.response_basic_view',err_body="Invalid Code or Expired"))
    return render_template('auth/phone_verification.html')
+
+@auth.route('/generate-otp-phone',methods=['POST'])
+@login_required
+def generate_otp_phone():
+   if request.method == "POST":
+      print("STARTED\n"*5)
+      isOk,otp,exp,user_id= __phoneConfirmCode(current_user)
+      if isOk:
+         create_new_otp = PhoneConfirmCode(user_id=user_id,otp=otp,exp=exp)
+         db.session.add(create_new_otp)
+         db.session.commit()
+         return jsonify({"res":"Phone Confirmation Code generated successfully"})
+      else:
+         return jsonify({"res":"Something Wrong"})
+
 
 @auth.route('/email_verification',methods=['POST','GET'])
 @login_required
 def email_verification_view():
    if current_user.isEmailVerified:
-      return redirect(url_for('simple_res.response_succ_view',succ_body="Already Verified"))
+      return redirect(url_for('sample.response_succ_view',succ_body="Already Verified"))
    elif request.method == "POST":
       otp = request.form.get('otp')
       otp_code = EmailConfirmCode.query.filter_by(user_id=current_user.id).first()
@@ -140,7 +165,7 @@ def email_verification_view():
          db.session.commit()
          return redirect(url_for("auth.verification_center_view"))
       else:
-         return redirect(url_for('simple_res.response_basic_view',err_body="Invalid Code"))
+         return redirect(url_for('sample.response_basic_view',err_body="Invalid Code or Expired"))
    return render_template('auth/email_verification.html')
 
 @auth.route('/generate-otp-email',methods=['POST'])

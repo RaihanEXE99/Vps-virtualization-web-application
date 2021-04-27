@@ -29,12 +29,12 @@ def create_app():
     from .views import views
     from .auth import auth
     from ._security_test import security_test
-    from .simple_res import simple_res
+    from .sample import sample
 
     app.register_blueprint(views,url_prefix='/')
     app.register_blueprint(auth,url_prefix='/')
     app.register_blueprint(security_test,url_prefix='/unit')
-    app.register_blueprint(simple_res,url_prefix='/response')
+    app.register_blueprint(sample,url_prefix='/response')
 
     from .models import User
 

@@ -13,12 +13,10 @@ views = Blueprint('views',__name__)
 def home():
    return render_template("home.html",user = current_user)
 
-
-
-@views.route('/phone_verification')
-@login_required
-def verification_center():
-   return render_template('auth/phone_verification.html')
+# @views.route('/verification_center')
+# @login_required
+# def verification_center():
+#    return render_template('auth/verification_center.html')
 
 @views.route('/two_factor_toggle',methods=['POST','GET'])
 @login_required
