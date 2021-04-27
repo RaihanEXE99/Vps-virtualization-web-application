@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %} OSAAS - PXE/WinPE - Config Generator {% endblock %}</title>
+
+    <!-- NEW -->
+    <!-- Flavicon ::Use Yours <3 ::-->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/media/logos/favicon.ico') }}" />
+    <!-- Adding Font [Raihan] -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700" />
+    <!--begin::Global Stylesheets Bundle(used by all pages)-->
+    <link href="{{ url_for('static', filename='assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
+    <!--end::Global Stylesheets Bundle-->
+	<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" ></script>
+    <!-- NEW ENDS -->
+    {% block style %}
+{% endblock %}
+</head>
+
+<body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled aside-fixed aside-default-enabled">
+
+<!--layout-partial:layout/master.html-->
+		
+<!--begin::Main-->
+<!--begin::Root-->
+<div class="d-flex flex-column flex-root">
+	<!--begin::Page-->
+	<div class="page d-flex flex-row flex-column-fluid">
+
+		<!--layout-partial:layout/aside/_default.html-->
+		{% include "base/layout/aside/_default.html" %}
+
+		<!--begin::Wrapper-->
+		<div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+
+			<!--layout-partial:layout/header/_base.html-->
+			{% include "base/layout/header/_base.html" %}
+			<!--begin::Content-->
+			<div class="content fs-6 d-flex flex-column flex-column-fluid" id="kt_content">
+
+				<!--layout-partial:layout/toolbars/_default.html-->
+
+				<!--begin::Post-->
+				<div class="post fs-6 d-flex flex-column-fluid" id="kt_post">
+
+				<!--layout-partial:layout/content/_default.html-->
+				<div class="container">
+					<!-- MESSAGES -->
+					<div for="error-graber" class="d-flex justify-content-center" >
+						<div class="mw-50">
+							{% with messages = get_flashed_messages(with_categories=true) %}
+								{% if messages %}
+									{% for category,message in messages %}
+										{% if category == "error" %}
+										<div class="d-flex  justify-content-center  alert alert-danger alert-dismissable fade show"  data-dismiss="alert" role="alert">
+											<div>
+												{{ message }} 
+												<!-- <i style="color: gray;" class="fa fa-times mx-8" aria-hidden="true"></i> -->
+											</div>
+										</div>
+										{% else %}
+										<div class="d-flex  justify-content-center alert alert-success alert-dismissable fade show" data-dismiss="alert" role="alert">
+											<div>
+												{{ message }} 
+												<!-- <i style="color: gray;" class="fa fa-times" aria-hidden="true"></i> -->
+											</div>
+										</div>
+										{% endif %}
+									{% endfor %}
+								{% endif %}
+							{% endwith %}
+						</div>
+					</div>
+					<!-- END MESSAGES -->
+					{% block content %}
+					{% endblock %}
+					
+				</div>
+				<!-- Main Container -->
+				</div>
+				<!--end::Post-->
+			</div>
+			<!--end::Content-->
+
+			<!--layout-partial:layout/_footer.html-->
+			{% include "base/layout/_footer.html" %}
+		</div>
+		<!--end::Wrapper-->
+	</div>
+	<!--end::Page-->
+	<!--begin::Modals-->
+
+<!--layout-partial:partials/modals/create-project/_main.html-->
+
+
+<!--layout-partial:partials/modals/_invite-friends.html-->
+
+	<!--end::Modals-->
+</div>
+<!--end::Root-->
+
+<!--layout-partial:layout/topbar/partials/_activity-drawer.html-->
+
+
+<!--layout-partial:layout/_scrolltop.html-->
+{% include "base/layout/_scrolltop.html" %}
+<!--end::Main-->
+
+<!-- NEW -->
+<script src="{{ url_for('static', filename='assets/plugins/global/plugins.bundle.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/scripts.bundle.js') }}"></script>
+<!-- NEW::ENDS -->
+<!-- Extra -->
+<script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+<!-- EndExtra -->
+{% block script %}
+{% endblock %}
+
+</body>
+</html>

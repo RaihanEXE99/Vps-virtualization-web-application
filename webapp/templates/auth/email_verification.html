@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %} Verification Page {% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center">
+  <div class="card w-75 p-3 ">
+      <div class="card-header d-flex justify-content-center align-items-center">
+          <h1>Email Verification</h1>
+      </div>
+      <form method="POST" action="{{ url_for('auth.email_verification_view') }}" class="card-body">
+        <div class="mb-10">
+            <div class="mb-10">
+                <label class="required form-label">Authentication Code</label>
+                <div class="d-flex">
+                    <input name="otp" type="number" class="form-control form-control-solid" placeholder="6 Digit Code"/>
+                  <button type="button" onclick="emailTimer(this)" id="proceed1" class="btn btn-success">
+                    Send
+                  </button>
+                </div>
+              </div>  
+            <div class="d-flex justify-content-center">
+                <p class="fs-7" style="display:none" id="countBlock"> Wait <span id="countdowntimer1" style="color: tomato;">300 </span> Seconds for sending another code</p>
+            </div>
+            <div class="d-flex justify-content-center my-8">
+                <button type="submit" class="btn btn-dark">Submit</button>
+            </div>
+          </div>
+      </form>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+  function emailTimer(doc){
+    fetch("/generate-otp-email",{
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      method: 'post',
+      body: ``
+    }).then(res=>res.json()).then(res=>console.log(res))
+    
+    doc.style.display='none';
+    let timeleft = 300;
+    document.getElementById("countBlock").style.display = "block";
+    let downloadTimer = setInterval(function(){
+    timeleft--;
+    document.getElementById("countdowntimer1").textContent = timeleft;
+      if(timeleft <= 0){
+          document.getElementById("countBlock").style.display = "none";
+          clearInterval(downloadTimer);
+      }   
+    },1000);
+  }
+  $("#proceed1").click(function() {
+      $("#proceed1").hide();
+      setTimeout(function() {
+        $("#proceed1").show();
+      }, 300*1000);
+    });
+</script>
+{% endblock %}

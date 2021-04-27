@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %} Verification Center {% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center">
+    <div class="card w-75 p-3 ">
+        <h1 style="text-align: center;" class="my-6 text-success">Verification Center</h1>
+        <div class="separator"></div>
+        <div class="card-header d-flex align-items-center">
+            <h1>Email Verification</h1>
+            {% if current_user.isEmailVerified %}
+            <a href="{{ url_for('auth.email_verification_view')}}" >
+                <button type="button" class="btn btn-success">
+                    Completed
+                </button>
+            </a>
+            {% else %}
+            <a href="{{ url_for('auth.email_verification_view')}}" >
+                <button type="button" class="btn btn-danger">
+                    Authenticate
+                </button>
+            </a>
+            {% endif %}
+        </div>
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h1>Phone Number Verification</h1>
+            {% if current_user.isPhoneVerified %}
+            <a href="{{ url_for('auth.phone_verification_view')}}">
+                <button type="button" class="btn btn-success">
+                    Authenticate
+                </button>
+            </a>
+            {% else %}
+            <a href="{{ url_for('auth.phone_verification_view')}}">
+                <button type="button" class="btn btn-danger">
+                    Authenticate
+                </button>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+</script>
+{% endblock %}

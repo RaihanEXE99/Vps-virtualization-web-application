@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %} Two Factor Auth {% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center">
+    <div class="card w-75 p-3 ">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h1>Two Factor Authentication</h1>
+            {% if val == True %}
+            <form method="POST" action="{{ url_for('views.two_factor_toggle')}}">
+                <input hidden name="toggle" value="True" />
+                    <button type="submit" class="btn btn-success">
+                        Enabled
+                    </button>
+            </form>
+            {% elif val == False %}
+            <form method="POST" action="{{ url_for('views.two_factor_toggle')}}">
+                <input hidden name="toggle" value="False" />
+                    <button type="submit" class="btn btn-danger">
+                        Disabled
+                    </button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+</script>
+{% endblock %}

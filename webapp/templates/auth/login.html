@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %} Login {% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center">
+  <div class="card w-75 p-3 ">
+      <div class="card-header d-flex justify-content-center align-items-center">
+          <h1>Login</h1>
+      </div>
+      <form method="POST" action="{{ url_for('auth.login_post') }}" class="card-body">
+          <!-- Form -->
+          <label class="required form-label">Email</label>
+          <input name="email" id="email" type="text" class="form-control form-control-solid" placeholder="name@example.com"/>
+  
+          <label class="required form-label">Password</label>
+          <input name="password" id="password" type="password" class="form-control form-control-solid" placeholder="Password"/>
+
+          <div class="d-flex justify-content-center my-8">
+              <button class="btn btn-dark">Login</button>
+          </div>
+          <!-- End Form -->
+      </form>
+      <div class="card-footer d-flex justify-content-center">
+        <h1 class="fs-4">Doesn't have an account?<a href="/sign-up">Signup</a></h1>
+      </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+  /*
+const element = document.querySelector('#logCred');
+element.addEventListener('submit', event => {
+  event.preventDefault();
+  let email = document.getElementById('email');
+  let password = document.getElementById('password');
+  let data = {
+    email : email.value,
+    password : password.value,
+  }
+  console.log(data)
+  fetch('/login',{
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    method: 'post',
+    body: `email=${data['email']}&password=${data['password']}`
+  }).then(res=>res.json()).then(res=>{
+    if (res['res'] == 'OTPCREATED'){
+      otp();
+    }else{
+
+    }
+  })
+  console.log(email.value,password.value);
+});
+
+function otp(){
+  let login = document.getElementById('logCred');
+  let logOtp = document.getElementById('logOtp');
+  login.remove();
+  logOtp.style.display = "block";
+}
+*/
+</script>
+{% endblock %}

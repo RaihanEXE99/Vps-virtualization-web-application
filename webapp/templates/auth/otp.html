@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %} OTP {% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center">
+  <div class="card w-75 p-3 ">
+      <div class="card-header d-flex justify-content-center align-items-center">
+          <h1>Two Factor Authentication</h1>
+      </div>
+      <form method="POST" action="{{ url_for('auth.otp_post') }}" class="card-body">
+          <!-- Form -->
+          <input hidden type="text" name="p1" value="{{p1}}">
+          <input hidden type="text" name="p2" value="{{p2}}">
+
+          <label  class="required form-label">OTP CODE</label>
+          <input name="otp" type="number" class="form-control form-control-solid" placeholder=""/>
+
+          <div class="d-flex justify-content-center my-8">
+              <button type="submit" class="btn btn-dark">Submit</button>
+          </div>
+          <!-- End Form -->
+      </form>
+  </div>
+</div>
+{% endblock %}
